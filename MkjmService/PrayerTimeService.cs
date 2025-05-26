@@ -11,7 +11,7 @@ public class PrayerTimeService : IPrayerTimeService
 
     public async Task<PrayerTimeResponse?> GetPrayerTimesAsync(PrayerTimeQuery query)
     {
-        var baseUri = new Uri("https://moonsighting.ahmedbukhasim.sa/time_json.php");
+        var baseUri = new Uri("https://moonsighting.ahmedbukhamsin.sa/time_json.php?");
 
         var queryparams = new Dictionary<string, string?>()
         {
@@ -19,9 +19,9 @@ public class PrayerTimeService : IPrayerTimeService
             ["tz"] = query.Timezone,
             ["lat"] = query.Latitude.ToString(CultureInfo.InvariantCulture),
             ["lon"] = query.Longitude.ToString(CultureInfo.InvariantCulture),
-            ["method"] = query.Method.ToString(),
-            ["both"] = query.Both ? "1" : "0",
-            ["time"] = query.Time ? "1" : "0"
+            ["method"] = query.Method,
+            ["both"] = query.Both,
+            ["time"] = query.Time
         };
 
         var queryUrl = QueryHelpers.AddQueryString(baseUri.ToString(), queryparams);
@@ -36,12 +36,10 @@ public class PrayerTimeService : IPrayerTimeService
             }
 
             var content = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
 
-            var result = JsonSerializer.Deserialize<PrayerTimeResponse>(content, options);
+            var result = JsonSerializer.Deserialize<PrayerTimeResponse>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            
             return result;
         }
         catch
