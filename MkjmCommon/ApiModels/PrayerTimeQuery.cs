@@ -1,4 +1,4 @@
-﻿namespace MkjmCommon;
+﻿namespace MkjmCommon.ApiModels;
 
 public class PrayerTimeQuery    
 {
