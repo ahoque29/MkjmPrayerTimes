@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MkjmCommon", "MkjmCommon\MkjmCommon.csproj", "{D20F9FCB-F9AD-45B0-90D9-671698C812E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MkjmService", "MkjmService\MkjmService.csproj", "{AB3BF5D8-7B78-48FF-BFF2-E41A91A63BF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{D20F9FCB-F9AD-45B0-90D9-671698C812E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D20F9FCB-F9AD-45B0-90D9-671698C812E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D20F9FCB-F9AD-45B0-90D9-671698C812E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB3BF5D8-7B78-48FF-BFF2-E41A91A63BF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB3BF5D8-7B78-48FF-BFF2-E41A91A63BF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB3BF5D8-7B78-48FF-BFF2-E41A91A63BF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB3BF5D8-7B78-48FF-BFF2-E41A91A63BF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
