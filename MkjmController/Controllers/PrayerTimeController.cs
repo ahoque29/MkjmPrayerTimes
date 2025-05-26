@@ -20,4 +20,17 @@ public class PrayerTimeController(IPrayerTimeService prayerTimeService) : Contro
 
         return Ok(result);
     }
+
+    [HttpGet("mkjm")]
+    public async Task<ActionResult<PrayerTimeResponse?>> GetMkjmPrayerTime([FromQuery] int year, int month = 0)
+    {
+        var result = await prayerTimeService.GetMkjmPrayerTimeAsync(year, month);
+
+        if (result == null)
+        {
+            return NotFound($"Prayer times not found for Milton Keynes Jamee Masjid in the year {year}.");
+        }
+
+        return Ok(result);
+    }
 }
