@@ -4,5 +4,5 @@ namespace MkjmService;
 
 public interface IPrayerTimeService
 {
-    Task<PrayerTimeResponse?>? GetPrayerTimesAsync(PrayerTimeQuery query);
+    Task<PrayerTimeResponse?> GetPrayerTimesAsync(PrayerTimeQuery query);
 }
