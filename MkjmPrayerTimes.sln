@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MkjmCommon", "MkjmCommon\MkjmCommon.csproj", "{D20F9FCB-F9AD-45B0-90D9-671698C812E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MkjmService", "MkjmService\MkjmService.csproj", "{AB3BF5D8-7B78-48FF-BFF2-E41A91A63BF5}"
@@ -7,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MkjmConsole", "MkjmConsole\MkjmConsole.csproj", "{584203CB-A846-4B6A-B9DF-09CBB01D343C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MkjmController", "MkjmController\MkjmController.csproj", "{9BF40500-7A9D-49FF-B7D9-0F5ADD180DE9}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "mkjmwebsite", "MkjmWebsite\mkjmwebsite.esproj", "{5AAB4331-2C91-4414-AF93-A48162F4B614}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +35,14 @@ Global
 		{9BF40500-7A9D-49FF-B7D9-0F5ADD180DE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BF40500-7A9D-49FF-B7D9-0F5ADD180DE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BF40500-7A9D-49FF-B7D9-0F5ADD180DE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AAB4331-2C91-4414-AF93-A48162F4B614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AAB4331-2C91-4414-AF93-A48162F4B614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AAB4331-2C91-4414-AF93-A48162F4B614}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5AAB4331-2C91-4414-AF93-A48162F4B614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AAB4331-2C91-4414-AF93-A48162F4B614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AAB4331-2C91-4414-AF93-A48162F4B614}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
