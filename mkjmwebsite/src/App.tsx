@@ -1,12 +1,14 @@
-function App() {
+import {PrayerTimesPage} from "./pages/PrayerTimesPage.tsx";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 
+function App() {
     return (
-        <>
-            <div style={{padding: '2rem', fontSize: '1.5rem'}}>
-                Hello, world.
-            </div>
-        </>
-    )
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<PrayerTimesPage />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App
