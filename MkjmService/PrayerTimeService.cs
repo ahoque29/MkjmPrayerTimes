@@ -73,7 +73,7 @@ public class PrayerTimeService : IPrayerTimeService
             return results;
         }
 
-        var filteredTimes = results.Times.Where(t => t.Date.Month == month);
+        var filteredTimes = results.Times.Where(t => t.GetDate(year).Month == month);
 
         var filteredResponse = new PrayerTimeResponse
         {
