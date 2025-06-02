@@ -1,0 +1,16 @@
+arrowParens: avoid
+bracketSpacing: true
+trailingComma: none
+endOfLine: auto
+semi: true
+singleQuote: false
+printWidth: 100
+tabWidth: 4
+useTabs: false
+quoteProps: as-needed
+jsxSingleQuote: false
+overrides:
+    - files:
+          - "*.js"
+      options:
+          singleQuote: true
