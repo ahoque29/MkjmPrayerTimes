@@ -13,7 +13,7 @@ public class PrayerTimeService : IPrayerTimeService
     {
         var baseUri = new Uri("https://moonsighting.ahmedbukhamsin.sa/time_json.php?");
 
-        var queryparams = new Dictionary<string, string?>()
+        var queryParams = new Dictionary<string, string?>()
         {
             ["year"] = query.Year,
             ["tz"] = query.Timezone,
@@ -24,7 +24,7 @@ public class PrayerTimeService : IPrayerTimeService
             ["time"] = query.Time
         };
 
-        var queryUrl = QueryHelpers.AddQueryString(baseUri.ToString(), queryparams);
+        var queryUrl = QueryHelpers.AddQueryString(baseUri.ToString(), queryParams);
 
         try
         {

@@ -18,7 +18,7 @@ public class DailyPrayerTimes
         var monthString = Day[..6];
         var dateString = $"{monthString} {year}";
 
-        if (!DateTime.TryParseExact(dateString, "MMM dd yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
+        if (!DateTime.TryParseExact(dateString, "MMM dd yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
         {
             return DateTime.MaxValue; // Invalid date format
         }
