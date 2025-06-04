@@ -1,5 +1,4 @@
-﻿using MkjmCommon.ApiModels;
-using MkjmService;
+﻿using MkjmService;
 
 namespace MkjmConsole;
 
@@ -7,20 +6,10 @@ internal static class Program
 {
     private static async Task Main()
     {
-        var prayerTimeService = new PrayerTimeService();
-
-        var query = new PrayerTimeQuery
-        {
-            Latitude = "51.992135", // Milton Keynes Jamee Masjid
-            Longitude = "-0.734272", // Milton Keynes Jamee Masjid
-            Timezone = "Europe/London",
-            Method = "0", // Hanafi General
-            Year = "2026",
-            Both = "0",
-            Time = "1"
-        };
-
-        var prayerTimes = await prayerTimeService.GetPrayerTimesAsync(query);
+        var httpClient = new HttpClient();
+        var prayerTimeService = new PrayerTimeService(httpClient);
+        
+        var prayerTimes = await prayerTimeService.GetMkjmPrayerTimeAsync(DateTime.UtcNow.Year);
 
         if (prayerTimes == null)
         {
@@ -46,10 +35,14 @@ internal static class Program
 
         Console.WriteLine($"Day: {firstPrayerTime.Day}");
         Console.WriteLine($"Fajr: {firstPrayerTime.Times.Fajr}");
+        Console.WriteLine($"Fajr Iqamah: {firstPrayerTime.Times.FajrIqamah}");
         Console.WriteLine($"Sunrise: {firstPrayerTime.Times.Sunrise}");
         Console.WriteLine($"Dhuhr: {firstPrayerTime.Times.Dhuhr}");
+        Console.WriteLine($"Dhuhr Iqamah: {firstPrayerTime.Times.DhuhrIqamah}");
         Console.WriteLine($"Asr: {firstPrayerTime.Times.Asr}");
+        Console.WriteLine($"Asr Iqamah: {firstPrayerTime.Times.AsrIqamah}");
         Console.WriteLine($"Maghrib: {firstPrayerTime.Times.Maghrib}");
+        Console.WriteLine($"Maghrib Iqamah: {firstPrayerTime.Times.MaghribIqamah}");
         Console.WriteLine($"Isha: {firstPrayerTime.Times.Isha}");
     }
 }

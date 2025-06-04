@@ -29,16 +29,16 @@ export function PrayerTimesTable({ data }: PrayerTimesTableProps) {
                     <tr key={i} style={i % 2 === 0 ? rowStyleEven : rowStyleOdd}>
                         <td style={tdStyle}>{day}</td>
                         <td style={tdStyle}>{times.fajr}</td>
-                        <td style={tdStyle}></td>
+                        <td style={tdStyle}>{times.fajrIqamah}</td>
                         <td style={tdStyle}>{times.sunrise}</td>
                         <td style={tdStyle}>{times.dhuhr}</td>
-                        <td style={tdStyle}></td>
+                        <td style={tdStyle}>{times.dhuhrIqamah}</td>
                         <td style={tdStyle}>{times.asr}</td>
-                        <td style={tdStyle}></td>
+                        <td style={tdStyle}>{times.asrIqamah}</td>
                         <td style={tdStyle}>{times.maghrib}</td>
-                        <td style={tdStyle}></td>
+                        <td style={tdStyle}>{times.maghribIqamah}</td>
                         <td style={tdStyle}>{times.isha}</td>
-                        <td style={tdStyle}></td>
+                        <td style={tdStyle}>{times.ishaIqamah}</td>
                     </tr>
                 ))}
             </tbody>

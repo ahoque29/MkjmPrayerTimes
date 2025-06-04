@@ -7,13 +7,18 @@ namespace MkjmService;
 
 public class PrayerTimeService : IPrayerTimeService
 {
-    private readonly HttpClient _httpClient = new();
+    private readonly HttpClient _httpClient;
+
+    public PrayerTimeService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
 
     public async Task<PrayerTimeResponse?> GetPrayerTimesAsync(PrayerTimeQuery query)
     {
         var baseUri = new Uri("https://moonsighting.ahmedbukhamsin.sa/time_json.php?");
 
-        var queryParams = new Dictionary<string, string?>()
+        var queryParams = new Dictionary<string, string?>
         {
             ["year"] = query.Year,
             ["tz"] = query.Timezone,
@@ -40,7 +45,7 @@ public class PrayerTimeService : IPrayerTimeService
             var result = JsonSerializer.Deserialize<PrayerTimeResponse>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            return result;
+            return TrimAllTimes(result);
         }
         catch
         {
@@ -48,7 +53,7 @@ public class PrayerTimeService : IPrayerTimeService
         }
     }
 
-    public async Task<PrayerTimeResponse?> GetMkjmPrayerTimeAsync(int year, int month = 0)
+    public async Task<PrayerTimeResponse?> GetMkjmPrayerTimeAsync(int year, int month = 0, int maghribIqamahOffset = 5)
     {
         var query = new PrayerTimeQuery
         {
@@ -70,10 +75,15 @@ public class PrayerTimeService : IPrayerTimeService
 
         if (month == 0)
         {
+            if (maghribIqamahOffset > 0)
+            {
+                PopulateMaghribIqamah(maghribIqamahOffset, results);
+            }
+
             return results;
         }
 
-        var filteredTimes = results.Times.Where(t => t.GetDate(year).Month == month);
+        var filteredTimes = results.Times.Where(t => t.GetDate(year).Month == month).ToArray();
 
         var filteredResponse = new PrayerTimeResponse
         {
@@ -81,6 +91,54 @@ public class PrayerTimeService : IPrayerTimeService
             Times = filteredTimes
         };
 
+        if (maghribIqamahOffset > 0)
+        {
+            PopulateMaghribIqamah(maghribIqamahOffset, filteredResponse);
+        }
+
         return filteredResponse;
+    }
+
+    private static void PopulateMaghribIqamah(int maghribIqamahOffset, PrayerTimeResponse results)
+    {
+        foreach (var time in results.Times)
+        {
+            if (time?.Times == null || string.IsNullOrEmpty(time.Times.Maghrib))
+            {
+                continue;
+            }
+
+            if (TimeSpan.TryParse(time.Times.Maghrib, out var maghribTime))
+            {
+                time.Times.MaghribIqamah =
+                    maghribTime.Add(TimeSpan.FromMinutes(maghribIqamahOffset)).ToString(@"hh\:mm");
+            }
+        }
+    }
+
+    private static PrayerTimeResponse? TrimAllTimes(PrayerTimeResponse? response)
+    {
+        if (response is null)
+        {
+            return response;
+        }
+        
+        foreach (var day in response.Times)
+        {
+            var prayerTimes = day.Times;
+            if (prayerTimes == null)
+            {
+                continue;
+            }
+            
+            prayerTimes.Fajr = prayerTimes.Fajr?.Trim();
+            prayerTimes.Sunrise = prayerTimes.Sunrise?.Trim();
+            prayerTimes.Dhuhr = prayerTimes.Dhuhr?.Trim();
+            prayerTimes.Asr = prayerTimes.Asr?.Trim();
+            prayerTimes.Maghrib = prayerTimes.Maghrib?.Trim();
+            prayerTimes.Isha = prayerTimes.Isha?.Trim();
+        }
+        
+        return response;
     }
 }
