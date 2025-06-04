@@ -5,15 +5,13 @@ using MkjmCommon.ApiModels;
 
 namespace MkjmService;
 
-public class PrayerTimeService : IPrayerTimeService
+public class PrayerTimeService(HttpClient httpClient) : IPrayerTimeService
 {
-    private readonly HttpClient _httpClient = new();
-
     public async Task<PrayerTimeResponse?> GetPrayerTimesAsync(PrayerTimeQuery query)
     {
         var baseUri = new Uri("https://moonsighting.ahmedbukhamsin.sa/time_json.php?");
 
-        var queryparams = new Dictionary<string, string?>()
+        var queryParams = new Dictionary<string, string?>
         {
             ["year"] = query.Year,
             ["tz"] = query.Timezone,
@@ -24,11 +22,11 @@ public class PrayerTimeService : IPrayerTimeService
             ["time"] = query.Time
         };
 
-        var queryUrl = QueryHelpers.AddQueryString(baseUri.ToString(), queryparams);
+        var queryUrl = QueryHelpers.AddQueryString(baseUri.ToString(), queryParams);
 
         try
         {
-            var response = await _httpClient.GetAsync(queryUrl);
+            var response = await httpClient.GetAsync(queryUrl);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -40,7 +38,7 @@ public class PrayerTimeService : IPrayerTimeService
             var result = JsonSerializer.Deserialize<PrayerTimeResponse>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            return result;
+            return ProcessResponse(result);
         }
         catch
         {
@@ -48,7 +46,7 @@ public class PrayerTimeService : IPrayerTimeService
         }
     }
 
-    public async Task<PrayerTimeResponse?> GetMkjmPrayerTimeAsync(int year, int month = 0)
+    public async Task<PrayerTimeResponse?> GetMkjmPrayerTimeAsync(int year, int month = 0, int maghribIqamahOffset = 5)
     {
         var query = new PrayerTimeQuery
         {
@@ -70,10 +68,15 @@ public class PrayerTimeService : IPrayerTimeService
 
         if (month == 0)
         {
+            if (maghribIqamahOffset > 0)
+            {
+                PopulateMaghribIqamah(maghribIqamahOffset, results);
+            }
+
             return results;
         }
 
-        var filteredTimes = results.Times.Where(t => t.GetDate(year).Month == month);
+        var filteredTimes = results.Times.Where(t => t.GetDate(year).Month == month).ToArray();
 
         var filteredResponse = new PrayerTimeResponse
         {
@@ -81,6 +84,63 @@ public class PrayerTimeService : IPrayerTimeService
             Times = filteredTimes
         };
 
+        if (maghribIqamahOffset > 0)
+        {
+            PopulateMaghribIqamah(maghribIqamahOffset, filteredResponse);
+        }
+
         return filteredResponse;
+    }
+
+    private static void PopulateMaghribIqamah(int maghribIqamahOffset, PrayerTimeResponse results)
+    {
+        foreach (var time in results.Times)
+        {
+            if (time?.Times == null || string.IsNullOrEmpty(time.Times.Maghrib))
+            {
+                continue;
+            }
+
+            if (TimeSpan.TryParse(time.Times.Maghrib, out var maghribTime))
+            {
+                time.Times.MaghribIqamah =
+                    maghribTime.Add(TimeSpan.FromMinutes(maghribIqamahOffset)).ToString(@"hh\:mm");
+            }
+        }
+    }
+
+    private static PrayerTimeResponse? ProcessResponse(PrayerTimeResponse? response)
+    {
+        if (response is null)
+        {
+            return response;
+        }
+
+        foreach (var day in response.Times)
+        {
+            var date = day.GetDate(int.Parse(response.Query.Year));
+            day.DayOfTheMonth = date.Day;
+            day.Month = date.Month;
+            
+            var prayerTimes = day.Times;
+            if (prayerTimes == null)
+            {
+                continue;
+            }
+
+            TrimAllTimes(prayerTimes);
+        }
+
+        return response;
+    }
+
+    private static void TrimAllTimes(PrayerTimes prayerTimes)
+    {
+        prayerTimes.Fajr = prayerTimes.Fajr?.Trim();
+        prayerTimes.Sunrise = prayerTimes.Sunrise?.Trim();
+        prayerTimes.Dhuhr = prayerTimes.Dhuhr?.Trim();
+        prayerTimes.Asr = prayerTimes.Asr?.Trim();
+        prayerTimes.Maghrib = prayerTimes.Maghrib?.Trim();
+        prayerTimes.Isha = prayerTimes.Isha?.Trim();
     }
 }

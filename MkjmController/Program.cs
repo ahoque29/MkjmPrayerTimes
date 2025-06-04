@@ -15,6 +15,7 @@ public static class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddHttpClient<IPrayerTimeService, PrayerTimeService>();
         builder.Services.AddScoped<IPrayerTimeService, PrayerTimeService>();
 
         var app = builder.Build();

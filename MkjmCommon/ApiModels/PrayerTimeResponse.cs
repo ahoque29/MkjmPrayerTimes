@@ -2,6 +2,6 @@
 
 public class PrayerTimeResponse
 {
-    public PrayerTimeQuery Query { get; set; }
-    public IEnumerable<DailyPrayerTimes> Times { get; set; }
+    public PrayerTimeQuery Query { get; init; }
+    public DailyPrayerTimes[] Times { get; init; }
 }

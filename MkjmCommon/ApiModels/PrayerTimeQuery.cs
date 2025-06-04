@@ -2,11 +2,11 @@
 
 public class PrayerTimeQuery    
 {
-    public string Latitude { get; set; }
-    public string Longitude { get; set; }
-    public string Timezone { get; set; }
-    public string Method { get; set; }
-    public string Year { get; set; }
-    public string Both { get; set; }
-    public string Time { get; set; }
+    public string Latitude { get; init; }
+    public string Longitude { get; init; }
+    public string Timezone { get; init; }
+    public string Method { get; init; }
+    public string Year { get; init; }
+    public string Both { get; init; }
+    public string Time { get; init; }
 }
