@@ -2,7 +2,8 @@
 
 export function exportCsv(data: PrayerTimeResponse) {
     const headers = [
-        "Date",
+        "Day",
+        "Month",
         "Fajr",
         "Iqamah",
         "Sunrise",
@@ -16,8 +17,9 @@ export function exportCsv(data: PrayerTimeResponse) {
         "Iqamah"
     ];
 
-    const rows = data.times.map(({ day, times }) => [
-        day,
+    const rows = data.times.map(({ times, dayOfTheMonth, month }) => [
+        dayOfTheMonth,
+        month,
         times.fajr?.trim() || "",
         times.fajrIqamah?.trim() || "",
         times.sunrise?.trim() || "",
