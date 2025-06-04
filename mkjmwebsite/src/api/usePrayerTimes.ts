@@ -1,21 +1,35 @@
 ﻿import { useEffect, useState } from "react";
 import type { PrayerTimeResponse } from "../types/prayerTimeTypes.ts";
 
-export function usePrayerTimes(year: number, month: number): PrayerTimeResponse | string {
-    const [data, setData] = useState<PrayerTimeResponse | string>("Loading...");
+type PrayerTimesResult = {
+    data: PrayerTimeResponse | null;
+    isLoading: boolean;
+    error: string | null;
+};
+
+export function usePrayerTimes(year: number, month: number): PrayerTimesResult {
+    const [data, setData] = useState<PrayerTimeResponse | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        setData("Loading...");
+        setIsLoading(true);
+        setError(null);
+
         fetch(`api/PrayerTime/mkjm?year=${year}&month=${month}`)
             .then(res => {
-                if (!res.ok) {
-                    throw new Error("Failed to fetch");
-                }
+                if (!res.ok) throw new Error("Failed to fetch");
                 return res.json();
             })
-            .then(json => setData(json))
-            .catch(err => setData("Error: " + err.message));
+            .then(json => {
+                setData(json);
+                setIsLoading(false);
+            })
+            .catch(err => {
+                setError(err.message);
+                setIsLoading(false);
+            });
     }, [year, month]);
 
-    return data;
+    return { data, isLoading, error };
 }

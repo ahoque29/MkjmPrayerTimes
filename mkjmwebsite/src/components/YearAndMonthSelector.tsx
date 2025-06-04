@@ -1,11 +1,4 @@
-﻿type YearAndMonthSelectorProps = {
-    years: number[];
-    months: { value: number; label: string }[];
-    selectedYear: number;
-    selectedMonth: number;
-    onYearChange: (year: number) => void;
-    onMonthChange: (month: number) => void;
-};
+﻿import type { YearAndMonthSelectorProps } from "../types/YearAndMonthSelectorProps.ts";
 
 export function YearAndMonthSelector({
     years,

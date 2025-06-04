@@ -1,39 +1,27 @@
 ﻿import { usePrayerTimes } from "../api/usePrayerTimes.ts";
 import { PrayerTimesTable } from "../components/PrayerTimesTable.tsx";
-import { useState } from "react";
 import { YearAndMonthSelector } from "../components/YearAndMonthSelector.tsx";
-import { getMonthOptions, getYearOptions } from "../utils/dateOptions.ts";
+import { useYearAndMonthSelection } from "../utils/useYearAndMonthSelection.ts";
 
 export function PrayerTimesPage() {
-    const years = getYearOptions();
-    const months = getMonthOptions();
+    const yearAndMonthsProps = useYearAndMonthSelection();
+    const { selectedYear, selectedMonth } = yearAndMonthsProps;
+    const { data, isLoading, error } = usePrayerTimes(selectedYear, selectedMonth);
 
-    const [selectedYear, setSelectedYear] = useState(years[1]); // Default to the current year
-    const [selectedMonth, setSelectedMonth] = useState(0); // Default to "All" months
-
-    const data = usePrayerTimes(selectedYear, selectedMonth);
     return (
         <div style={{ padding: "2rem" }}>
-            <YearAndMonthSelector
-                years={years}
-                months={months}
-                selectedYear={selectedYear}
-                selectedMonth={selectedMonth}
-                onYearChange={setSelectedYear}
-                onMonthChange={setSelectedMonth}
-            />
-
+            <YearAndMonthSelector {...yearAndMonthsProps} />
             <div style={{ fontSize: "1.25rem", textAlign: "center" }}>
-                {data === "Loading..." ? (
+                {isLoading ? (
                     <div style={{ fontSize: "1rem", color: "#555", marginTop: "1rem" }}>
                         Loading...
                     </div>
-                ) : typeof data === "string" ? (
-                    <div>{data}</div>
-                ) : (
+                ) : error ? (
+                    <div style={{ color: "red" }}>{error}</div>
+                ) : data ? (
                     <PrayerTimesTable data={data} />
-                )}
-            </div>
+                ) : null}
+            </div>{" "}
         </div>
     );
 }
