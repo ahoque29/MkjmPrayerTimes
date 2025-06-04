@@ -12,12 +12,14 @@
     ishaIqamah?: string;
 };
 
-export type DayAndTimes = {
+export type DailyPrayerTimes = {
     day: string;
     times: PrayerTimes;
+    dayOfTheMonth: number;
+    month: number;
 };
 
 export type PrayerTimeResponse = {
     query: Record<string, string>;
-    times: DayAndTimes[];
+    times: DailyPrayerTimes[];
 };

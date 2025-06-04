@@ -11,6 +11,7 @@ export function PrayerTimesTable({ data }: PrayerTimesTableProps) {
             <thead>
                 <tr>
                     <th style={thStyle}>Day</th>
+                    <th style={thStyle}>Month</th>
                     <th style={thStyle}>Fajr</th>
                     <th style={thStyle}>Iqamah</th>
                     <th style={thStyle}>Shourooq</th>
@@ -25,9 +26,10 @@ export function PrayerTimesTable({ data }: PrayerTimesTableProps) {
                 </tr>
             </thead>
             <tbody>
-                {data.times.map(({ day, times }, i) => (
+                {data.times.map(({ times, dayOfTheMonth, month }, i) => (
                     <tr key={i} style={i % 2 === 0 ? rowStyleEven : rowStyleOdd}>
-                        <td style={tdStyle}>{day}</td>
+                        <td style={tdStyle}>{dayOfTheMonth}</td>
+                        <td style={tdStyle}>{month}</td>
                         <td style={tdStyle}>{times.fajr}</td>
                         <td style={tdStyle}>{times.fajrIqamah}</td>
                         <td style={tdStyle}>{times.sunrise}</td>

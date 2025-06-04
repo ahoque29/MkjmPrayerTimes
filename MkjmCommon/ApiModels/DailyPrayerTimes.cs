@@ -7,6 +7,8 @@ public class DailyPrayerTimes
 {
     public string Day { get; set; }
     public PrayerTimes Times { get; set; }
+    public int DayOfTheMonth { get; set; }
+    public int Month { get; set; }
 
     public DateTime GetDate(int year)
     {
