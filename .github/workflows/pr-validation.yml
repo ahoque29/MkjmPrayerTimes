@@ -1,0 +1,32 @@
+﻿name: Validate Build for Pull Requests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+
+      - name: Restore dependencies
+        run: dotnet restore MkjmPrayerTimes.sln
+
+      - name: Build entire solution
+        run: dotnet build MkjmPrayerTimes.sln --configuration Release --no-restore
+
+      - name: Publish controller project
+        run: dotnet publish MkjmController/MkjmController.csproj -c Release -o out --no-restore
+
+      - name: Verify output
+        run: dir out -Recurse
