@@ -67,6 +67,6 @@ jobs:
         with:
           app-name: 'mkjm-api'
           slot-name: 'Production'
-          package: .
+          package: ${{env.DOTNET_ROOT}}/myapp
           
       
