@@ -30,7 +30,7 @@ jobs:
         run: dotnet publish MkjmController/MkjmController.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: List published files
-        run: ls -la "${{env.DOTNET_ROOT}}/myapp"
+        run: dir "${{env.DOTNET_ROOT}}/myapp" -Recurse
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
