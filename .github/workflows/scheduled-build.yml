@@ -1,16 +1,15 @@
-﻿name: Build on Branches
+﻿name: Scheduled Build on Main
 
 on:
+  schedule:
+    - cron: '0 0 * * *'  # Every day at midnight UTC
   push:
     branches:
-      - 'dev/**'
+      - main
 
 jobs:
   build:
     runs-on: windows-latest
-    permissions:
-      contents: read
-
     steps:
       - uses: actions/checkout@v4
 
