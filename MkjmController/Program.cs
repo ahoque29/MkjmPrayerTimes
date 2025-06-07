@@ -21,7 +21,7 @@ public static class Program
         {
             options.AddPolicy("AllowedOriginsPolicy", policyBuilder =>
             {
-                policyBuilder.WithOrigins(allowedOrigins)
+                policyBuilder.WithOrigins(allowedOrigins!)
                     .AllowAnyHeader()
                     .AllowAnyMethod();
             });
