@@ -18,7 +18,7 @@ export function usePrayerTimes(year: number, month: number): PrayerTimesResult {
         setIsLoading(true);
         setError(null);
 
-        fetch(`${apiBaseUrl}/PrayerTime/mkjm?year=${year}&month=${month}`)
+        fetch(`${apiBaseUrl}/api/PrayerTime/mkjm?year=${year}&month=${month}`)
             .then(res => {
                 if (!res.ok) throw new Error("Failed to fetch");
                 return res.json();
