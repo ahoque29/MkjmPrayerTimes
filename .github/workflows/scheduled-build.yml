@@ -1,0 +1,25 @@
+﻿name: Scheduled Build on Main
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Every day at midnight UTC
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+
+      - name: Restore dependencies
+        run: dotnet restore MkjmPrayerTimes.sln
+
+      - name: Build solution
+        run: dotnet build MkjmPrayerTimes.sln --configuration Release --no-restore
