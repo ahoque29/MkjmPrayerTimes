@@ -15,11 +15,25 @@ public static class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowedOriginsPolicy", policyBuilder =>
+            {
+                policyBuilder.WithOrigins(allowedOrigins)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+
         builder.Services.AddHttpClient<IPrayerTimeService, PrayerTimeService>();
         builder.Services.AddScoped<IPrayerTimeService, PrayerTimeService>();
 
         var app = builder.Build();
 
+        app.UseCors("AllowedOriginsPolicy");
+        
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
@@ -30,6 +44,7 @@ public static class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+
 
 
         app.MapControllers();
