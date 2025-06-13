@@ -7,6 +7,7 @@ on:
 
 jobs:
   validate:
+    name: Validate Build
     runs-on: windows-latest
     permissions:
       contents: read
