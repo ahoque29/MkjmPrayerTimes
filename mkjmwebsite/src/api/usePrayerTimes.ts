@@ -12,11 +12,13 @@ export function usePrayerTimes(year: number, month: number): PrayerTimesResult {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
+
     useEffect(() => {
         setIsLoading(true);
         setError(null);
 
-        fetch(`api/PrayerTime/mkjm?year=${year}&month=${month}`)
+        fetch(`${apiBaseUrl}/api/PrayerTime/mkjm?year=${year}&month=${month}`)
             .then(res => {
                 if (!res.ok) throw new Error("Failed to fetch");
                 return res.json();
