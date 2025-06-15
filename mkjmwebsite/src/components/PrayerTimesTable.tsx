@@ -1,4 +1,4 @@
-﻿import React from "react";
+﻿import React, { useEffect, useRef } from "react";
 import type { PrayerTimeResponse } from "../types/prayerTimeTypes.ts";
 
 interface PrayerTimesTableProps {
@@ -6,6 +6,18 @@ interface PrayerTimesTableProps {
 }
 
 export function PrayerTimesTable({ data }: PrayerTimesTableProps) {
+    const today = new Date();
+    const todayDay = today.getDate();
+    const todayMonth = today.getMonth() + 1; // Months are 0-indexed in JavaScript
+
+    const todayRef = useRef<HTMLTableRowElement | null>(null);
+
+    useEffect(() => {
+        if (todayRef.current) {
+            todayRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+    }, []);
+
     return (
         <table style={{ borderCollapse: "collapse", width: "100%" }}>
             <thead>
@@ -26,27 +38,38 @@ export function PrayerTimesTable({ data }: PrayerTimesTableProps) {
                 </tr>
             </thead>
             <tbody>
-                {data.times.map(({ times, dayOfTheMonth, month }, i) => (
-                    <tr key={i} style={i % 2 === 0 ? rowStyleEven : rowStyleOdd}>
-                        <td style={tdStyle}>{dayOfTheMonth}</td>
-                        <td style={tdStyle}>{month}</td>
-                        <td style={tdStyle}>{times.fajr}</td>
-                        <td style={tdStyle}>{times.fajrIqamah}</td>
-                        <td style={tdStyle}>{times.sunrise}</td>
-                        <td style={tdStyle}>{times.dhuhr}</td>
-                        <td style={tdStyle}>{times.dhuhrIqamah}</td>
-                        <td style={tdStyle}>{times.asr}</td>
-                        <td style={tdStyle}>{times.asrIqamah}</td>
-                        <td style={tdStyle}>{times.maghrib}</td>
-                        <td style={tdStyle}>{times.maghribIqamah}</td>
-                        <td style={tdStyle}>{times.isha}</td>
-                        <td style={tdStyle}>{times.ishaIqamah}</td>
-                    </tr>
-                ))}
+                {data.times.map(({ times, dayOfTheMonth, month }, i) => {
+                    const isToday = dayOfTheMonth === todayDay && month === todayMonth;
+
+                    const rowStyle = isToday
+                        ? { ...rowStyleHighlight }
+                        : i % 2 === 0
+                          ? rowStyleEven
+                          : rowStyleOdd;
+
+                    return (
+                        <tr key={i} style={rowStyle} ref={isToday ? todayRef : null}>
+                            <td style={tdStyle}>{dayOfTheMonth}</td>
+                            <td style={tdStyle}>{month}</td>
+                            <td style={tdStyle}>{times.fajr}</td>
+                            <td style={tdStyle}>{times.fajrIqamah}</td>
+                            <td style={tdStyle}>{times.sunrise}</td>
+                            <td style={tdStyle}>{times.dhuhr}</td>
+                            <td style={tdStyle}>{times.dhuhrIqamah}</td>
+                            <td style={tdStyle}>{times.asr}</td>
+                            <td style={tdStyle}>{times.asrIqamah}</td>
+                            <td style={tdStyle}>{times.maghrib}</td>
+                            <td style={tdStyle}>{times.maghribIqamah}</td>
+                            <td style={tdStyle}>{times.isha}</td>
+                            <td style={tdStyle}>{times.ishaIqamah}</td>
+                        </tr>
+                    );
+                })}
             </tbody>
         </table>
     );
 }
+
 const thStyle: React.CSSProperties = {
     border: "1px solid #ddd",
     padding: "8px",
@@ -66,4 +89,9 @@ const rowStyleEven: React.CSSProperties = {
 
 const rowStyleOdd: React.CSSProperties = {
     backgroundColor: "#fafafa"
+};
+
+const rowStyleHighlight: React.CSSProperties = {
+    backgroundColor: "#fff8dc", // light golden
+    fontWeight: "bold"
 };
