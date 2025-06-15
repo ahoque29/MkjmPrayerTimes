@@ -1,4 +1,4 @@
-﻿import React from "react";
+﻿import React, { useEffect, useRef } from "react";
 import type { PrayerTimeResponse } from "../types/prayerTimeTypes.ts";
 
 interface PrayerTimesTableProps {
@@ -9,6 +9,14 @@ export function PrayerTimesTable({ data }: PrayerTimesTableProps) {
     const today = new Date();
     const todayDay = today.getDate();
     const todayMonth = today.getMonth() + 1; // Months are 0-indexed in JavaScript
+
+    const todayRef = useRef<HTMLTableRowElement | null>(null);
+
+    useEffect(() => {
+        if (todayRef.current) {
+            todayRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+    }, []);
 
     return (
         <table style={{ borderCollapse: "collapse", width: "100%" }}>
@@ -40,7 +48,7 @@ export function PrayerTimesTable({ data }: PrayerTimesTableProps) {
                           : rowStyleOdd;
 
                     return (
-                        <tr key={i} style={rowStyle}>
+                        <tr key={i} style={rowStyle} ref={isToday ? todayRef : null}>
                             <td style={tdStyle}>{dayOfTheMonth}</td>
                             <td style={tdStyle}>{month}</td>
                             <td style={tdStyle}>{times.fajr}</td>
@@ -61,6 +69,7 @@ export function PrayerTimesTable({ data }: PrayerTimesTableProps) {
         </table>
     );
 }
+
 const thStyle: React.CSSProperties = {
     border: "1px solid #ddd",
     padding: "8px",
